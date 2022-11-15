@@ -1,7 +1,7 @@
 /build
 /node_modules
-/src/wordList.json
-/src/translations.json
+src/wordLists.json
+src/translations.json
 
 # Logs
 logs
