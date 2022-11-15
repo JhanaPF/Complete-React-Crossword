@@ -4,14 +4,16 @@ import {Col, Row, Button} from 'reactstrap';
 import 'moment/locale/oc-lnc';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Crossword from '@jaredreisinger/react-crossword';
+import WordsList from './wordsList.json';
+import Translations from './translations.json';
 
 class App extends React.Component {
 
-    constructor(){
+    constructor () {  
         super();
-        
-        this.state={ 
-            data: {
+
+        this.state = { 
+            data: { // Data structure example for react-crossword
                 across : {
                     1: { clue: 'This', answer: 'XXX', row: 0, col: 0 },
                     4: { clue: 'is', answer: 'XXX', row: 0, col: 4 },
@@ -33,22 +35,18 @@ class App extends React.Component {
         const allSpecialCharacters = 'ÁÀÇÉÈÍÌÓÒÚÙùúòóìíèéçàá';
         this.specialCharacters = [];
         for (let index = 0; index < allSpecialCharacters.length; index++) {      
-            this.specialCharacters.push(allSpecialCharacters[index])
+            this.specialCharacters.push(allSpecialCharacters[index]);
         }
     }   
 
-    componentDidMount(){
+    componentDidMount () {
        this.generateGrid();
        // this.clock = setInterval(() => this.setState({ date: moment().locale('oc-lnc').format('MMMM Do YYYY, h:mm:ss a') }), 1000);
     }
 
-    componentDidUpdate(){
-      // console.log("UPdate component");
-    }
-
-    handleChange = (event) =>{
+    handleChange = (event) => {
         const {name, value} = event.currentTarget;
-        //  console.log(name, value)
+        // console.log(name, value)
         this.setState({ [name] : value });
     }    
 
@@ -63,14 +61,13 @@ class App extends React.Component {
           currentIndex--;
 
           // And swap it with the current element.
-          [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
+          [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
         }
 
         return array;
     }
 
-    showAnswers(){
+    showAnswers () {
         this.crosswordRef.current.fillAllAnswers();
     }
 
@@ -84,13 +81,12 @@ class App extends React.Component {
                 this.virtualGridWithDirections[horizontalIndex][verticalIndex] = null;
             }
         }
-      //  console.log('Génération grille virtuelle : ', this.virtualGrid)
+        
+        //  console.log('Génération grille virtuelle : ', this.virtualGrid)
     }
 
     addWordToVirtualGrid = (x, y, dir, word) => {
-        //   console.log(x,y, dir, word)
-
-        // this.virtualGrid[row][column], row = y, col = x
+        //   console.log(x, y, dir, word);
 
         for (let index = 0; index < word.length; index++) { // Boucle chaque lettre du nouevau mot
             if(dir === 'across'){ // Horizontale
@@ -212,20 +208,7 @@ class App extends React.Component {
         // }
 
 
-        let fullWords = [
-           // {answer: "Chaise", clue: "Permet de s'asseoir"},
-           // {answer: "Arbre", clue: "Les oiseaux se posent dessus"},
-           // {answer: "Avion", clue: "Traverse de grandes distances"},
-           // {answer: "Télévision", clue: "Fenêtre sur le monde"},
-           // {answer: "Montagne", clue: "Rocher de grande taille"},
-
-            {answer: "Pluèia", clue: "Ça mouille"},
-            {answer: "Gelada", clue: "C'est froid"},
-            {answer: "Frucha", clue: "Se cueille aux branches"},
-            {answer: "Trìfoula", clue: "Les chiens les déterrent"},
-            {answer: "Bèca-flour", clue: "Oiseau qui vole en arrière"},
-
-        ];
+        let fullWords = WordsList;
 
         let words = [];
         fullWords.forEach(w => { // Delete clues for grid algorithme 
@@ -445,22 +428,24 @@ class App extends React.Component {
         
     }
 
-    isCrosswordCorrect(){
+    isCrosswordCorrect () {
         return this.crosswordRef.current.isCrosswordCorrect();
     }
 
-    crosswordIsCorrect(){
+    crosswordIsCorrect () {
         //console.log("Mot-croisé complété !")
     }
 
-    hideCrossword(){
+    hideCrossword () {
         this.crosswordRef.current.reset();
     }
 
     addSpecialCharacterToCase (character) {
     }
 
-    wordCorrect(){console.log('Mot correct')}
+    wordCorrect(){ 
+        alert('Correct word !');
+    }
 
     render() {        
         const buttonHeight=50;
@@ -473,23 +458,23 @@ class App extends React.Component {
                                 ref={this.crosswordRef} 
                                 columnBreakpoint={'22vh'} 
                                 data={this.state.data}
-                                acrossLabel="Ourizountal" 
-                                downLabel="Vertical"
+                                acrossLabel={Translations.horizontal}
+                                downLabel={Translations.vertical}
                                 onCorrect={this.wordCorrect.bind(this)}
                                 onCrosswordCorrect={this.crosswordIsCorrect.bind(this)} 
                                 className='m-auto'
-                               // key={(key) => console.log(key)}
+                                // key={(key) => console.log(key)}
                                 style={{height:'1000px', width: '1000px'}} />
                         </Col>
                     </Row>
 
                     <Row className='mx-auto'>
                         <Col className='mx-auto'>
-                            <Button style={{height: buttonHeight, width: buttonHeight * 3}} onClick={this.showAnswers} >Solution</Button>
-                            <Button style={{height: buttonHeight, width: buttonHeight * 4}} onClick={this.hideCrossword.bind(this)}>Cacher les mots</Button>
-                            <Button style={{height: buttonHeight, width: buttonHeight * 4}} onClick={this.generateGrid.bind(this)}>Générer une nouvelle grille</Button>
+                            <Button style={{height: buttonHeight, width: buttonHeight * 3}} onClick={this.showAnswers} >{Translations.solution}</Button>
+                            <Button style={{height: buttonHeight, width: buttonHeight * 4}} onClick={this.hideCrossword.bind(this)}>{Translations.hideWords}</Button>
+                            <Button style={{height: buttonHeight, width: buttonHeight * 4}} onClick={this.generateGrid.bind(this)}>{Translations.generateGrid}</Button>
                         </Col>
-                        {/**  Créer un bouton pour chaque caractère spécial
+                        {/** 
                         <Col className='mx-auto'>
                             {this.specialCharacters.map(c => 
                                 <Button onClick={this.addSpecialCharacterToCase.bind(this, c)}>{c}</Button>    
