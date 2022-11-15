@@ -1,4 +1,10 @@
 [    
+    {"answer": "Equator", "clue": "the great circle on a sphere"},
     {"answer": "Rain", "clue": "It makes you wet"},
-    {"answer": "Ice", "clue": "It's cold"}
+    {"answer": "Perpendicular", "clue": "Meeting a given line or surface at right angles"},
+    {"answer": "Ice", "clue": "It's cold"},
+    {"answer": "Chair", "clue": "You can seat on it"},
+    {"answer": "Table", "clue": "You can eat on it"},
+    {"answer": "Sun", "clue": "Hot"},
+    {"answer": "Moon", "clue": "Shining in the night"}
 ]
